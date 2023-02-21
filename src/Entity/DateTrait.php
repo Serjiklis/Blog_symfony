@@ -2,45 +2,45 @@
 
 namespace App\Entity;
 
-use DateTimeInterface;
+
 use Doctrine\DBAL\Types\Types;
 
 trait DateTrait
 {
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?DateTimeInterface $created = null;
+    private ?\DateTime $created = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?DateTimeInterface $updated = null;
+    private ?\DateTime $updated = null;
 
     /**
-     * @return DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getCreated(): ?DateTimeInterface
+    public function getCreated(): ?\DateTime
     {
         return $this->created;
     }
 
     /**
-     * @param DateTimeInterface|null $created
+     * @param \DateTime|null $created
      */
-    public function setCreated(?DateTimeInterface $created): void
+    public function setCreated(?\DateTime $created): void
     {
         $this->created = $created;
     }
 
     /**
-     * @return DateTimeInterface|null
+     * @return \DateTime|null
      */
-    public function getUpdated(): ?DateTimeInterface
+    public function getUpdated(): ?\DateTime
     {
         return $this->updated;
     }
 
     /**
-     * @param DateTimeInterface|null $updated
+     * @param \DateTime|null $updated
      */
-    public function setUpdated(?DateTimeInterface $updated): void
+    public function setUpdated(?\DateTime $updated): void
     {
         $this->updated = $updated;
     }

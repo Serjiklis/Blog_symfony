@@ -28,10 +28,10 @@ class Post
     private ?string $image = null;
 
 	#[ORM\Column(type: Types::DATETIME_MUTABLE)]
-	private ?DateTimeInterface $created = null;
+	private ?\DateTimeInterface $created = null;
 
 	#[ORM\Column(type: Types::DATETIME_MUTABLE)]
-	private ?DateTimeInterface $updated = null;
+	private ?\DateTimeInterface $updated = null;
 
 
     #[ORM\Column]
@@ -181,33 +181,33 @@ class Post
     }
 
 	/**
-	 * @return DateTimeInterface|null
+	 * @return \DateTimeInterface|null
 	 */
-	public function getCreated(): ?DateTimeInterface
+	public function getCreated(): ?\DateTimeInterface
 	{
 		return $this->created;
 	}
 
 	/**
-	 * @param DateTimeInterface|null $created
+	 * @param \DateTimeInterface|null $created
 	 */
-	public function setCreated(?DateTimeInterface $created): void
+	public function setCreated(?\DateTimeInterface $created): void
 	{
 		$this->created = $created;
 	}
 
 	/**
-	 * @return DateTimeInterface|null
+	 * @return \DateTimeInterface|null
 	 */
-	public function getUpdated(): ?DateTimeInterface
+	public function getUpdated(): ?\DateTimeInterface
 	{
 		return $this->updated;
 	}
 
 	/**
-	 * @param DateTimeInterface|null $updated
+	 * @param \DateTimeInterface|null $updated
 	 */
-	public function setUpdated(?DateTimeInterface $updated): void
+	public function setUpdated(?\DateTimeInterface $updated): void
 	{
 		$this->updated = $updated;
 	}
