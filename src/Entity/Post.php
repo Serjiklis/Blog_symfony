@@ -37,20 +37,20 @@ class Post
     #[ORM\Column]
     private ?int $status = null;
 
-    #[ORM\ManyToOne(inversedBy: 'posts')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Author $author = null;
+//    #[ORM\ManyToOne(targetEntity: Author::class,  inversedBy: 'posts')]
+//    #[ORM\JoinColumn(nullable: false)]
+//    private ?Author $author = null;
 
-    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'posts')]
-    private Collection $categories;
-
-    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class)]
-    private Collection $comments;
+//    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'posts')]
+//    private ?Collection $categories;
+//
+//    #[ORM\OneToMany(mappedBy: 'post', targetEntity: Comment::class)]
+//    private ?Collection $comments;
 
     public function __construct()
     {
-        $this->categories = new ArrayCollection();
-        $this->comments = new ArrayCollection();
+//        $this->categories = new ArrayCollection();
+//        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -108,77 +108,77 @@ class Post
         return $this;
     }
 
-    /**
-     * @return Author|null
-     */
-    public function getAuthor(): ?Author
-    {
-        return $this->author;
-    }
+//    /**
+//     * @return Author|null
+//     */
+//    public function getAuthor(): ?Author
+//    {
+//        return $this->author;
+//    }
+//
+//    /**
+//     * @param Author|null $author
+//     */
+//    public function setAuthor(?Author $author): void
+//    {
+//        $this->author = $author;
+//    }
 
-    /**
-     * @param Author|null $author
-     */
-    public function setAuthor(?Author $author): void
-    {
-        $this->author = $author;
-    }
 
 
-
-    /**
-     * @return Collection<int, Category>
-     */
-    public function getCategories(): Collection
-    {
-        return $this->categories;
-    }
-
-    public function addCategory(Category $category): self
-    {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
-        }
-
-        return $this;
-    }
-
-    public function removeCategory(Category $category): self
-    {
-        $this->categories->removeElement($category);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Comment>
-     */
-    public function getComments(): Collection
-    {
-        return $this->comments;
-    }
-
-    public function addComment(Comment $comment): self
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
-            $comment->setPost($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): self
-    {
-        if ($this->comments->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getPost() === $this) {
-                $comment->setPost(null);
-            }
-        }
-
-        return $this;
-    }
+//    /**
+//     * @return Collection<int, Category>
+//     */
+//    public function getCategories(): ?Collection
+//    {
+//        return $this->categories;
+//    }
+//
+//    public function addCategory(Category $category): self
+//    {
+//        if (!$this->categories->contains($category)) {
+//            $this->categories->add($category);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeCategory(Category $category): self
+//    {
+//        $this->categories->removeElement($category);
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * @return Collection<int, Comment>
+//     */
+//    public function getComments(): ?Collection
+//    {
+//        return $this->comments;
+//    }
+//
+//    public function addComment(Comment $comment): self
+//    {
+//        if (!$this->comments->contains($comment)) {
+//            $this->comments->add($comment);
+//            $comment->setPost($this);
+//        }
+//
+//        return $this;
+//    }
+//
+//    public function removeComment(Comment $comment): self
+//    {
+//        if ($this->comments->removeElement($comment)) {
+//            // set the owning side to null (unless already changed)
+//            if ($comment->getPost() === $this) {
+//                $comment->setPost(null);
+//            }
+//        }
+//
+//        return $this;
+//    }
 
 	/**
 	 * @return \DateTimeInterface|null
