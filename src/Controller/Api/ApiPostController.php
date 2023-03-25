@@ -9,24 +9,28 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ApiPostController extends AbstractController
 {
+	public function __construct(private PostRepository $repository, private SerializerInterface $serializer)
+	{
+		header('Access-Control-Allow-Origin: *');
+		header("Access-Control-Allow-Methods: GET, OPTIONS");
+	}
     #[Route('/api/post', name: 'app_api_post',methods: ["GET"])]
-    public function index(PostRepository $repository, SerializerInterface $serializer): Response
+    public function index(): Response
     {
-		$posts = $repository->findAll();
+		$posts = $this->repository->findAll();
 
-		$json = $serializer->serialize($posts,"json");
+		$json = $this->serializer->serialize($posts,"json");
 		$response = new Response($json);
 		$response->headers->set("Content-Type","application/json");
 		return $response;
     }
 
 	#[Route('/api/post', name: 'app_api_post_create', methods: ["POST"])]
-	public function createPost(PostRepository $repository, SerializerInterface $serializer, Request $request): Response
+	public function create(Request $request): Response
 	{
 		$body = file_get_contents('php://input');
 		$body=json_decode($body, TRUE);
@@ -39,9 +43,51 @@ class ApiPostController extends AbstractController
 		$post->setUpdated(new \DateTime("now"));
 		$post->setImage("xx");
 		$post->setStatus(0);
-		$repository->save($post, true);
-		$json = $serializer->serialize($post,"json");
+		$this->repository->save($post, true);
+		$json = $this->serializer->serialize($post,"json");
 
+		$response = new Response($json);
+		$response->headers->set("Content-Type","application/json");
+		return $response;
+	}
+
+	#[Route('/api/post/{id}', name: 'app_api_post_update', methods: ["PUT"])]
+	public function update(int $id): Response
+	{
+		$body = file_get_contents('php://input');
+		$body = json_decode($body, TRUE);
+
+		$post = $this->repository->find($id);
+
+		if ($post == null){
+			$response = new Response(json_encode(["message"=> "post not found", ]));
+			$response->headers->set("Content-Type","application/json");
+			$response->headers->set("Status",Response::HTTP_NOT_FOUND);
+			return $response;
+		}
+
+		$post->setTitle($body["title"]);
+		$post->setContent($body["content"]);
+		$post->setUpdated(new \DateTime('now'));
+		$this->repository->save($post, true);
+		$json = $this->serializer->serialize($post,"json");
+
+		$response = new Response($json);
+		$response->headers->set("Content-Type","application/json");
+		return $response;
+	}
+	#[Route('/api/post/{id}', name: 'app_api_post_get', methods: ["GET"])]
+	public function getById(int $id): Response
+	{
+		$post = $this->repository->find($id);
+
+		if ($post == null){
+			$response = new Response(json_encode(["message"=> "post not found", ]));
+			$response->headers->set("Content-Type","application/json");
+			$response->headers->set("Status",Response::HTTP_NOT_FOUND);
+			return $response;
+		}
+		$json = $this->serializer->serialize($post,"json");
 		$response = new Response($json);
 		$response->headers->set("Content-Type","application/json");
 		return $response;
