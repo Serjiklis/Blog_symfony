@@ -15,8 +15,13 @@ class ApiPostController extends AbstractController
 {
 	public function __construct(private PostRepository $repository, private SerializerInterface $serializer)
 	{
+//		header('Access-Control-Allow-Origin: *');
+//		header("Access-Control-Allow-Methods: *");
+
 		header('Access-Control-Allow-Origin: *');
-		header("Access-Control-Allow-Methods: GET, OPTIONS");
+		header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
+		header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+		header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 	}
     #[Route('/api/post', name: 'app_api_post',methods: ["GET"])]
     public function index(): Response
@@ -36,18 +41,26 @@ class ApiPostController extends AbstractController
 		$body=json_decode($body, TRUE);
 //		print_r($body);
 //		die();
+		$fileName = md5(microtime()).".jpg";
 		$post = new Post();
 		$post->setTitle($body["title"]);
-		$post->setContent($body["description"]);
+		$post->setContent($body["content"]);
 		$post->setCreated(new \DateTime("now"));
 		$post->setUpdated(new \DateTime("now"));
-		$post->setImage("xx");
+		$post->setImage($fileName);
 		$post->setStatus(0);
 		$this->repository->save($post, true);
 		$json = $this->serializer->serialize($post,"json");
+		$output_file = __DIR__."/../../../public/files/$fileName";
+		file_put_contents($output_file, file_get_contents($body["file"]));
 
 		$response = new Response($json);
 		$response->headers->set("Content-Type","application/json");
+//		header('Access-Control-Allow-Origin: *');
+//		header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
+//		header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+//		header("Allow: GET, POST, OPTIONS, PUT, DELETE");
+
 		return $response;
 	}
 
