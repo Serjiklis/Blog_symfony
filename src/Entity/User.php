@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,8 +24,8 @@ class User
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    #[ORM\Column(type: Types::ARRAY)]
-    private array $roles = [];
+    #[ORM\Column(type: 'json')]
+    private $roles;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
@@ -46,7 +48,7 @@ class User
         return $this->username;
     }
 
-    public function setUsername(string $username): self
+    public function setUsername(?string $username): self
     {
         $this->username = $username;
 
@@ -67,10 +69,11 @@ class User
 
     public function getRoles(): array
     {
-        return $this->roles;
+//		dd($this->roles);
+        return  $this->roles;
     }
 
-    public function setRoles(array $roles): self
+    public function setRoles($roles): self
     {
         $this->roles = $roles;
 
@@ -118,4 +121,14 @@ class User
 
         return $this;
     }
+
+	public function eraseCredentials()
+	{
+		// TODO: Implement eraseCredentials() method.
+	}
+
+	public function getUserIdentifier(): string
+	{
+		return $this->email;
+	}
 }

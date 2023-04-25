@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Controller\Admin\DashboardController;
+use App\Controller\Admin\PostCrudController;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\PostRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +17,42 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/post')]
 class PostController extends AbstractController
 {
-    #[Route('/', name: 'app_post_index', methods: ['GET'])]
+	public function __construct(private AdminUrlGenerator $adminUrlGenerator)
+	{
+	}
+
+	public function someMethod()
+	{
+		// if your application only contains one Dashboard, it's enough
+		// to define the controller related to this URL
+		$url = $this->adminUrlGenerator
+			->setController(PostCrudController::class)
+			->setAction(Action::INDEX)
+			->generateUrl();
+
+		// in applications containing more than one Dashboard, you must also
+		// define the Dashboard associated to the URL
+		$url = $this->adminUrlGenerator
+			->setDashboard(DashboardController::class)
+			->setController(PostCrudController::class)
+			->setAction(Action::INDEX)
+			->generateUrl();
+
+//		// some actions may require to pass additional parameters
+//		$url = $this->adminUrlGenerator
+//			->setController(PostCrudController::class)
+//			->setAction(Action::EDIT)
+//			->setEntityId($product->getId())
+//			->generateUrl();
+//
+//		// ...
+	}
+
+
+
+
+
+	#[Route('/', name: 'app_post_index', methods: ['GET'])]
     public function index(PostRepository $postRepository): Response
     {
         return $this->render('post/index.html.twig', [
